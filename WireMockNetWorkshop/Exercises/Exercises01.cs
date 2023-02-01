@@ -4,24 +4,11 @@ using System.Net;
 using System.Threading.Tasks;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
-using WireMock.Server;
 
 namespace WireMockNetWorkshop.Exercises
 {
-    public class Exercises01
+    public class Exercises01 : TestBase
     {
-        private WireMockServer server;
-        private RestClient client;
-
-        private const string BASE_URL = "http://localhost:9876";
-
-        [SetUp]
-        public void StartServer()
-        {
-            server = WireMockServer.Start(9876);
-            client = new RestClient(BASE_URL);
-        }
-
         private void SetupStubExercise101()
         {
             /************************************************
@@ -85,12 +72,6 @@ namespace WireMockNetWorkshop.Exercises
             RestResponse response = await client.ExecuteAsync(request);
 
             Assert.That(response.Content, Is.EqualTo("Loan application received!"));
-        }
-
-        [TearDown]
-        public void StopServer()
-        {
-            server.Stop();
         }
     }
 }

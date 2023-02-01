@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using System.Net;
+using System.Threading.Tasks;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -6,7 +8,7 @@ using WireMock.Server;
 namespace WireMockNetWorkshop.Examples
 {
     [TestFixture]
-    public class Examples01
+    public class Examples02
     {
         private WireMockServer server;
 
@@ -16,16 +18,14 @@ namespace WireMockNetWorkshop.Examples
             server = WireMockServer.Start(9876);
         }
 
-        private void CreateHelloWorldStub()
+        private void StubUrlMatching()
         {
             server.Given(
                 Request.Create().WithPath("/hello-world").UsingGet()
             )
             .RespondWith(
                 Response.Create()
-                .WithStatusCode(200)
-                .WithHeader("Content-Type", "text/plain")
-                .WithBody("Hello, world!")
+                .WithBody("URL matching")
             );
         }
 
