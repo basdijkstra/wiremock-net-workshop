@@ -19,7 +19,7 @@ namespace WireMockNetWorkshop.Examples
         private void CreateStubEchoHttpMethod()
         {
             server.Given(
-                Request.Create().WithPath("/echo-http-method").UsingAnyMethod()
+                Request.Create().UsingAnyMethod().WithPath("/echo-http-method")
             )
             .RespondWith(
                 Response.Create()
@@ -34,7 +34,7 @@ namespace WireMockNetWorkshop.Examples
         private void CreateStubEchoJsonRequestElement()
         {
             server.Given(
-                Request.Create().WithPath("/echo-json-request-element").UsingPost()
+                Request.Create().UsingPost().WithPath("/echo-json-request-element")
             )
             .RespondWith(
                 Response.Create()

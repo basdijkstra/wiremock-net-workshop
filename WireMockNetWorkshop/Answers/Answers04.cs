@@ -23,7 +23,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/echo-port").UsingGet()
+                Request.Create().UsingGet().WithPath("/echo-port")
             )
            .RespondWith(
                 Response.Create()
@@ -45,7 +45,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/echo-loan-amount").UsingPost()
+                Request.Create().UsingPost().WithPath("/echo-loan-amount")
             )
            .RespondWith(
                 Response.Create()

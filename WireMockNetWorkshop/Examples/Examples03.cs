@@ -23,7 +23,7 @@ namespace WireMockNetWorkshop.Examples
         private void CreateStatefulStub()
         {
             server.Given(
-                Request.Create().WithPath("/todo/items").UsingGet()
+                Request.Create().UsingGet().WithPath("/todo/items")
             )
             // In this scenario, when the current state is 'TodoList State Started',
             // a call to an HTTP GET will only return 'Buy milk'
@@ -34,7 +34,7 @@ namespace WireMockNetWorkshop.Examples
            );
 
             server.Given(
-                Request.Create().WithPath("/todo/items").UsingPost()
+                Request.Create().UsingPost().WithPath("/todo/items")
             )
             // In this scenario, when the current state is 'TodoList State Started',
             // a call to an HTTP POST will trigger a state transition to new state
@@ -47,7 +47,7 @@ namespace WireMockNetWorkshop.Examples
             );
 
             server.Given(
-                Request.Create().WithPath("/todo/items").UsingGet()
+                Request.Create().UsingGet().WithPath("/todo/items")
             )
             // In this scenario, when the current state is 'Cancel newspaper item added',
             // a call to an HTTP GET will return 'Buy milk;Cancel newspaper subscription'

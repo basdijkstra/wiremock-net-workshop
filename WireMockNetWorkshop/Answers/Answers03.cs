@@ -24,7 +24,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/loan/12345").UsingGet()
+                Request.Create().UsingGet().WithPath("/loan/12345")
             )
            .InScenario("Loan processing")
            .WillSetStateTo("NO_LOAN_FOUND")
@@ -34,7 +34,7 @@ namespace WireMockNetWorkshop.Answers
            );
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
                 .WithBody("Loan ID: 12345")
             )
             .InScenario("Loan processing")
@@ -45,7 +45,7 @@ namespace WireMockNetWorkshop.Answers
             );
 
             server.Given(
-                Request.Create().WithPath("/loan/12345").UsingGet()
+                Request.Create().UsingGet().WithPath("/loan/12345")
             )
             .InScenario("Loan processing")
             .WhenStateIs("LOAN_GRANTED")

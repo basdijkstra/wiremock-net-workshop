@@ -19,7 +19,7 @@ namespace WireMockNetWorkshop.Examples
         private void CreateHelloWorldStub()
         {
             server.Given(
-                Request.Create().WithPath("/hello-world").UsingGet()
+                Request.Create().UsingGet().WithPath("/hello-world")
             )
             .RespondWith(
                 Response.Create()

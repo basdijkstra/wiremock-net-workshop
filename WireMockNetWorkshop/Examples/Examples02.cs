@@ -21,7 +21,7 @@ namespace WireMockNetWorkshop.Examples
         private void StubUrlMatching()
         {
             server.Given(
-                Request.Create().WithPath("/url-matching").UsingGet()
+                Request.Create().UsingGet().WithPath("/url-matching")
             )
             .RespondWith(
                 Response.Create()
@@ -32,7 +32,7 @@ namespace WireMockNetWorkshop.Examples
         private void StubHeaderMatching()
         {
             server.Given(
-                Request.Create().WithPath("/header-matching").UsingGet()
+                Request.Create().UsingGet().WithPath("/header-matching")
                 .WithHeader("header_name", new ExactMatcher("header_value"))
             )
             .RespondWith(
@@ -44,7 +44,7 @@ namespace WireMockNetWorkshop.Examples
         private void StubCookieMatching()
         {
             server.Given(
-                Request.Create().WithPath("/cookie-matching").UsingGet()
+                Request.Create().UsingGet().WithPath("/cookie-matching")
                 .WithCookie("cookie_name", new ExactMatcher("cookie_value"))
             )
             .RespondWith(
@@ -56,7 +56,7 @@ namespace WireMockNetWorkshop.Examples
         private void StubJsonBodyMatching()
         {
             server.Given(
-                Request.Create().WithPath("/json-body-matching").UsingGet()
+                Request.Create().UsingGet().WithPath("/json-body-matching")
                 .WithBody(new JmesPathMatcher("fruit == 'banana'"))
                 .WithBody(new JmesPathMatcher("contains(date, '2023')"))
             )
@@ -69,7 +69,7 @@ namespace WireMockNetWorkshop.Examples
         private void StubReturnErrorStatusCode()
         {
             server.Given(
-                Request.Create().WithPath("/error-status-code").UsingGet()
+                Request.Create().UsingGet().WithPath("/error-status-code")
             )
             .RespondWith(
                 Response.Create()
@@ -80,7 +80,7 @@ namespace WireMockNetWorkshop.Examples
         private void StubReturnResponseWithDelay()
         {
             server.Given(
-                Request.Create().WithPath("/delayed-response").UsingGet()
+                Request.Create().UsingGet().WithPath("/delayed-response")
             )
             .RespondWith(
                 Response.Create()
@@ -92,7 +92,7 @@ namespace WireMockNetWorkshop.Examples
         private void StubReturnResponseWithFault()
         {
             server.Given(
-                Request.Create().WithPath("/fault-response").UsingGet()
+                Request.Create().UsingGet().WithPath("/fault-response")
             )
             .RespondWith(
                 Response.Create()

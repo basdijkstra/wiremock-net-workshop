@@ -17,7 +17,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
             )
             .RespondWith(
                 Response.Create()
@@ -34,7 +34,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
             )
             .RespondWith(
                 Response.Create()
@@ -51,7 +51,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
             )
             .RespondWith(
                 Response.Create()

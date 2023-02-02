@@ -22,7 +22,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
             )
             .RespondWith(
                 Response.Create()
@@ -42,7 +42,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
                 .WithHeader("speed", new ExactMatcher("slow"))
             )
             .RespondWith(
@@ -63,7 +63,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
                 .WithCookie("session", new ExactMatcher("invalid"))
             )
             .RespondWith(
@@ -84,7 +84,7 @@ namespace WireMockNetWorkshop.Answers
 		     ************************************************/
 
             server.Given(
-                Request.Create().WithPath("/requestLoan").UsingPost()
+                Request.Create().UsingPost().WithPath("/requestLoan")
                 .WithBody(new JmesPathMatcher("status == 'active'"))
             )
             .RespondWith(
