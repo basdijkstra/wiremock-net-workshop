@@ -7,7 +7,7 @@ using WireMock.ResponseBuilders;
 
 namespace WireMockNetWorkshop.Answers
 {
-    public class Exercises03 : TestBase
+    public class Answers03 : TestBase
     {
         private void SetupStubExercise301()
         {
