@@ -1,7 +1,5 @@
 using NUnit.Framework;
 using System;
-using System.Net;
-using System.Threading.Tasks;
 using WireMock.Matchers;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;

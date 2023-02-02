@@ -12,7 +12,7 @@ using WireMock.ResponseBuilders;
 
 namespace WireMockNetWorkshop.Answers
 {
-    public class Exercises02 : TestBase
+    public class Answers02 : TestBase
     {
         private void SetupStubExercise201()
         {
