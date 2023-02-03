@@ -24,9 +24,7 @@ namespace WireMockNetWorkshop.Examples
             .RespondWith(
                 Response.Create()
                 .WithStatusCode(200)
-                // The {{request.method}} handlebar extracts the HTTP method from the request
                 .WithBody("HTTP method used was {{request.method}}")
-                // This enables response templating for this specific mock response
                 .WithTransformer()
             );
         }
@@ -39,10 +37,7 @@ namespace WireMockNetWorkshop.Examples
             .RespondWith(
                 Response.Create()
                 .WithStatusCode(200)
-                // This extracts the book.title element from the JSON request body
-                // (using a JsonPath expression) and repeats it in the response body
                 .WithBody("The specified book title is {{JsonPath.SelectToken request.body \"$.book.title\"}}")
-                // This enables response templating for this specific mock response
                 .WithTransformer()
             );
         }
