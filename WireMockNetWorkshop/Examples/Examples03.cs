@@ -25,8 +25,6 @@ namespace WireMockNetWorkshop.Examples
             server.Given(
                 Request.Create().UsingGet().WithPath("/todo/items")
             )
-            // In this scenario, when the current state is 'TodoList State Started',
-            // a call to an HTTP GET will only return 'Buy milk'
            .InScenario("To do list")
            .WillSetStateTo("TodoList State Started")
            .RespondWith(
@@ -36,9 +34,6 @@ namespace WireMockNetWorkshop.Examples
             server.Given(
                 Request.Create().UsingPost().WithPath("/todo/items")
             )
-            // In this scenario, when the current state is 'TodoList State Started',
-            // a call to an HTTP POST will trigger a state transition to new state
-            // 'Cancel newspaper item added'
             .InScenario("To do list")
             .WhenStateIs("TodoList State Started")
             .WillSetStateTo("Cancel newspaper item added")
@@ -49,8 +44,6 @@ namespace WireMockNetWorkshop.Examples
             server.Given(
                 Request.Create().UsingGet().WithPath("/todo/items")
             )
-            // In this scenario, when the current state is 'Cancel newspaper item added',
-            // a call to an HTTP GET will return 'Buy milk;Cancel newspaper subscription'
             .InScenario("To do list")
             .WhenStateIs("Cancel newspaper item added")
             .RespondWith(
