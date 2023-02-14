@@ -110,6 +110,7 @@ namespace WireMockNetWorkshop.Answers
         {
             SetupStubExercise202();
 
+            // Test that response is triggered when request header is set
             RestRequest request = new RestRequest("/requestLoan", Method.Post);
 
             request.AddHeader("speed", "slow");
@@ -122,6 +123,18 @@ namespace WireMockNetWorkshop.Answers
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(stopwatch.ElapsedMilliseconds, Is.GreaterThanOrEqualTo(3000));
+
+            // Test that response is not triggered when request header is not set
+            RestRequest requestWithoutHeader = new RestRequest("/requestLoan", Method.Post);
+
+            stopwatch = Stopwatch.StartNew();
+
+            response = await client.ExecuteAsync(requestWithoutHeader);
+
+            stopwatch.Stop();
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Assert.That(stopwatch.ElapsedMilliseconds, Is.LessThanOrEqualTo(1000));
         }
 
         [Test]
@@ -129,6 +142,7 @@ namespace WireMockNetWorkshop.Answers
         {
             SetupStubExercise203();
 
+            // Test that response is triggered when cookie is set
             RestRequest request = new RestRequest("/requestLoan", Method.Post);
 
             client.CookieContainer.Add(new Cookie("session", "invalid", "/requestLoan", "localhost"));
@@ -136,6 +150,16 @@ namespace WireMockNetWorkshop.Answers
             RestResponse response = await client.ExecuteAsync(request);
 
             Assert.Throws<JsonReaderException>(() => JObject.Parse(response.Content!));
+
+            // Test that response is not triggered when cookie is not set / active
+            foreach (Cookie cookie in client.CookieContainer.GetAllCookies())
+            {
+                cookie.Expired = true;
+            }
+
+            response = await client.ExecuteAsync(request);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
 
         [Test]
@@ -143,6 +167,7 @@ namespace WireMockNetWorkshop.Answers
         {
             SetupStubExercise204();
 
+            // Test that response is triggered when request body is present
             RestRequest request = new RestRequest("/requestLoan", Method.Post);
 
             request.AddJsonBody(new { status = "active" });
@@ -150,6 +175,13 @@ namespace WireMockNetWorkshop.Answers
             RestResponse response = await client.ExecuteAsync(request);
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+
+            // Test that response is not triggered when request body is not present
+            RestRequest emptyBodyRequest = new RestRequest("/requestLoan", Method.Post);
+
+            response = await client.ExecuteAsync(emptyBodyRequest);
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
     }
 }
