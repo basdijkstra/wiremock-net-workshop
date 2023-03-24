@@ -1,9 +1,9 @@
 using NUnit.Framework;
-using RestSharp;
 using System.Net;
-using System.Threading.Tasks;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
+
+using static RestAssured.Dsl;
 
 namespace WireMockNetWorkshop.Exercises
 {
@@ -39,39 +39,42 @@ namespace WireMockNetWorkshop.Exercises
         }
 
         [Test]
-        public async Task TestStubExercise101()
+        public void TestStubExercise101()
         {
             SetupStubExercise101();
 
-            RestRequest request = new RestRequest("/requestLoan", Method.Post);
-
-            RestResponse response = await client.ExecuteAsync(request);
-
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.OK);
         }
 
         [Test]
-        public async Task TestStubExercise102()
+        public void TestStubExercise102()
         {
             SetupStubExercise102();
 
-            RestRequest request = new RestRequest("/requestLoan", Method.Post);
-
-            RestResponse response = await client.ExecuteAsync(request);
-
-            Assert.That(response.ContentType, Is.EqualTo("text/plain"));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .ContentType("text/plain");
         }
 
         [Test]
-        public async Task TestStubExercise103()
+        public void TestStubExercise103()
         {
             SetupStubExercise103();
 
-            RestRequest request = new RestRequest("/requestLoan", Method.Post);
-
-            RestResponse response = await client.ExecuteAsync(request);
-
-            Assert.That(response.Content, Is.EqualTo("Loan application received!"));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .Body("Loan application received!");
         }
     }
 }
