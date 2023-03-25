@@ -1,9 +1,9 @@
 using NUnit.Framework;
-using RestSharp;
 using System.Net;
-using System.Threading.Tasks;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
+
+using static RestAssured.Dsl;
 
 namespace WireMockNetWorkshop.Answers
 {
@@ -56,22 +56,23 @@ namespace WireMockNetWorkshop.Answers
         }
 
         [Test]
-        public async Task TestStubExercise401()
+        public void TestStubExercise401()
         {
             SetupStubExercise401();
 
-            RestRequest request = new RestRequest("/echo-port", Method.Get);
-
-            RestResponse response = await client.ExecuteAsync(request);
-
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(response.Content, Is.EqualTo("Listening on port 9876"));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Get("/echo-port")
+                .Then()
+                .StatusCode(HttpStatusCode.OK)
+                .Body("Listening on port 9876");
         }
 
         [TestCase(1000, TestName = "Loan application for $1000")]
         [TestCase(1500, TestName = "Loan application for $1500")]
         [TestCase(3000, TestName = "Loan application for $3000")]
-        public async Task TestStubExercise402(int loanAmount)
+        public void TestStubExercise402(int loanAmount)
         {
             SetupStubExercise402();
 
@@ -83,14 +84,15 @@ namespace WireMockNetWorkshop.Answers
                 }
             };
 
-            RestRequest request = new RestRequest("/echo-loan-amount", Method.Post);
-
-            request.AddJsonBody(requestBody);
-
-            RestResponse response = await client.ExecuteAsync(request);
-
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-            Assert.That(response.Content, Is.EqualTo($"Received loan application request for ${loanAmount}"));
+            Given()
+                .Spec(this.requestSpec)
+                .ContentType("application/json")
+                .Body(requestBody)
+                .When()
+                .Post("/echo-loan-amount")
+                .Then()
+                .StatusCode(HttpStatusCode.Created)
+                .Body($"Received loan application request for ${loanAmount}");
         }
     }
 }

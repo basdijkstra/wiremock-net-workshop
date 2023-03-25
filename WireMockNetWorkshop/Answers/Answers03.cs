@@ -1,9 +1,9 @@
 using NUnit.Framework;
-using RestSharp;
 using System.Net;
-using System.Threading.Tasks;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
+
+using static RestAssured.Dsl;
 
 namespace WireMockNetWorkshop.Answers
 {
@@ -57,26 +57,35 @@ namespace WireMockNetWorkshop.Answers
         }
 
         [Test]
-        public async Task TestStubExercise301()
+        public void TestStubExercise301()
         {
             SetupStubExercise301();
 
             // First request, no loan found
-            RestRequest request = new RestRequest("/loan/12345", Method.Get);
-            RestResponse response = await client.ExecuteAsync(request);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Get("/loan/12345")
+                .Then()
+                .StatusCode(HttpStatusCode.NotFound);
 
             // Second request, submit the loan request
-            request = new RestRequest("requestLoan", Method.Post);
-            request.AddBody("Loan ID: 12345");
-            response = await client.ExecuteAsync(request);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+            Given()
+                .Spec(this.requestSpec)
+                .Body("Loan ID: 12345")
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.Created);
 
             // Third request, loan found
-            request = new RestRequest("/loan/12345", Method.Get);
-            response = await client.ExecuteAsync(request);
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(response.Content, Is.EqualTo("Loan ID: 12345"));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Get("/loan/12345")
+                .Then()
+                .StatusCode(HttpStatusCode.OK)
+                .Body("Loan ID: 12345");
         }
     }
 }
