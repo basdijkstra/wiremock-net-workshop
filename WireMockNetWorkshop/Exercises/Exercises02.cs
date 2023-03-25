@@ -1,14 +1,15 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using RestSharp;
 using System;
 using System.Diagnostics;
 using System.Net;
-using System.Threading.Tasks;
+using System.Net.Http;
 using WireMock.Matchers;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
+
+using static RestAssured.Dsl;
 
 namespace WireMockNetWorkshop.Exercises
 {
@@ -62,94 +63,100 @@ namespace WireMockNetWorkshop.Exercises
         }
 
         [Test]
-        public async Task TestStubExercise201()
+        public void TestStubExercise201()
         {
             SetupStubExercise201();
 
-            RestRequest request = new RestRequest("/requestLoan", Method.Post);
-
-            RestResponse response = await client.ExecuteAsync(request);
-
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.ServiceUnavailable));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.ServiceUnavailable);
         }
 
         [Test]
-        public async Task TestStubExercise202()
+        public void TestStubExercise202()
         {
             SetupStubExercise202();
 
-            // Test that response is triggered when request header is set
-            RestRequest request = new RestRequest("/requestLoan", Method.Post);
-
-            request.AddHeader("speed", "slow");
-
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            RestResponse response = await client.ExecuteAsync(request);
+            Given()
+                .Spec(this.requestSpec)
+                .Header("speed", "slow")
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.OK);
 
             stopwatch.Stop();
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(stopwatch.ElapsedMilliseconds, Is.GreaterThanOrEqualTo(3000));
-
-            // Test that response is not triggered when request header is not set
-            RestRequest requestWithoutHeader = new RestRequest("/requestLoan", Method.Post);
 
             stopwatch = Stopwatch.StartNew();
 
-            response = await client.ExecuteAsync(requestWithoutHeader);
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.NotFound);
 
             stopwatch.Stop();
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
             Assert.That(stopwatch.ElapsedMilliseconds, Is.LessThanOrEqualTo(1000));
         }
 
         [Test]
-        public async Task TestStubExercise203()
+        public void TestStubExercise203()
         {
             SetupStubExercise203();
 
-            // Test that response is triggered when cookie is set
-            RestRequest request = new RestRequest("/requestLoan", Method.Post);
+            // Test that response with malformed response body is sent when cookie is set
+            HttpResponseMessage response = Given()
+                .Spec(this.requestSpec)
+                .Cookie(new Cookie("session", "invalid", "/requestLoan", "localhost"))
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .Extract()
+                .Response();
 
-            client.CookieContainer.Add(new Cookie("session", "invalid", "/requestLoan", "localhost"));
+            Assert.Throws<JsonReaderException>(() => JObject.Parse(response.Content.ToString()!));
 
-            RestResponse response = await client.ExecuteAsync(request);
+            // Test that no response is sent when cookie is not set
 
-            Assert.Throws<JsonReaderException>(() => JObject.Parse(response.Content!));
-
-            // Test that response is not triggered when cookie is not set / active
-            foreach (Cookie cookie in client.CookieContainer.GetAllCookies())
-            {
-                cookie.Expired = true;
-            }
-
-            response = await client.ExecuteAsync(request);
-
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.NotFound);
         }
 
         [Test]
-        public async Task TestStubExercise204()
+        public void TestStubExercise204()
         {
             SetupStubExercise204();
 
             // Test that response is triggered when request body is present
-            RestRequest request = new RestRequest("/requestLoan", Method.Post);
-
-            request.AddJsonBody(new { status = "active" });
-
-            RestResponse response = await client.ExecuteAsync(request);
-
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+            Given()
+                .Spec(this.requestSpec)
+                .ContentType("application/json")
+                .Body(new { status = "active" })
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.Created);
 
             // Test that response is not triggered when request body is not present
-            RestRequest emptyBodyRequest = new RestRequest("/requestLoan", Method.Post);
-
-            response = await client.ExecuteAsync(emptyBodyRequest);
-
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+            Given()
+                .Spec(this.requestSpec)
+                .When()
+                .Post("/requestLoan")
+                .Then()
+                .StatusCode(HttpStatusCode.NotFound);
         }
     }
 }
