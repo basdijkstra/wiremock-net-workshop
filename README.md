@@ -15,7 +15,7 @@ How does it work?
 ---
 You can go through all of the materials in your own time, at your own pace. The slides explain the concepts, and you can use the exercises to practice those concepts yourself.
 
-All exercises come with RestSharp-based tests that verify the implementation of your mocks. The answers to the exercises are supplied as a reference.
+All exercises come with tests (written using [RestAssured.Net](https://github.com/basdijkstra/rest-assured-net)) that verify the implementation of your mocks. The answers to the exercises are supplied as a reference.
 
 I've taken care of all the setup, so there shouldn't be a need to configure anything. 
 
